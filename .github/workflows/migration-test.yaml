@@ -1,0 +1,27 @@
+# This workflow uses Flyway Hub to test the migrations in the 'pagila' directory.
+#
+# The workflow will run automatically whenever a change is pushed to the 'pagila' directory on any branch.
+#
+# In order to use this workflow you will need to create a Github Actions secret called
+# FLYWAY_HUB_ACCESS_TOKEN containing a valid Flyway Hub API access token.
+#
+name: Test Migrations on Flyway Hub
+
+on:
+  push:
+    paths:
+    - 'pagila/**'
+  workflow_dispatch: {}
+
+jobs:
+  test-migrations:
+    name: Test flyway migration scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test migrations on Flyway Hub
+        uses: red-gate/flyway-hub-migration-test@v1
+        with:
+          projectId: 24
+          ref: ${{ github.ref }}
+env:
+  FLYWAY_HUB_ACCESS_TOKEN: ${{ secrets.FLYWAY_HUB_ACCESS_TOKEN }}
